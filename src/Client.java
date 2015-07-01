@@ -10,19 +10,31 @@ public class Client extends blackjackFrame {
     final protected void sendMessage()
     {
         out = chatInput.getText();
-        connection.sendMessageToServer(out);
-        out = "Client: " + out;
-        appendText(out);
-
+        try {
+            connection.sendMessageToServer(out);
+            out = "Client: " + out;
+            appendText(out);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        chatInput.setText("");
     }
 
     @Override
     final protected void connectToChat()
     {
-        connection = new Connection(this);
-        Thread start = new Thread(connection);
-        start.start();
-        chatOutput.append("Connected to server\n");
+        try {
+            connection = new Connection(this);
+            Thread start = new Thread(connection);
+            start.start();
+            chatOutput.append("Connected to server\n");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -41,9 +53,14 @@ public class Client extends blackjackFrame {
     public Client()
     {
         Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                connection.terminate();
-            }
+
+                public void run () {
+                    try {
+                        connection.terminate();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
         });
         this.startFrame("Test");
     }

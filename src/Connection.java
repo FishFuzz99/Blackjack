@@ -15,6 +15,7 @@ public class Connection implements Runnable {
     private ObjectOutputStream cardOutput;
     private Client client;
     private Card incomingCard;
+    private String incomingString;
 
 
     public Connection(Client client)
@@ -34,6 +35,7 @@ public class Connection implements Runnable {
             while (blackJackConnection.isConnected() && !(blackJackConnection.isClosed())) {
                 try {
                     incomingCard = (Card) cardInput.readObject();
+                    //incomingString - cardInput.readUTF();
 
                     client.appendText("Extract card info");
                 } catch (NullPointerException e) {
@@ -61,6 +63,7 @@ public class Connection implements Runnable {
     {
         try {
             cardOutput.writeUTF(message);
+            cardOutput.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
