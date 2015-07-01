@@ -34,6 +34,9 @@ abstract public class blackjackFrame extends JFrame {
 
     protected void startFrame(String buttonText)
     {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(625, 850);
+
         panel = new JPanel();
         chatOutput = new JTextArea();
         chatInput = new JTextArea();
@@ -44,8 +47,8 @@ abstract public class blackjackFrame extends JFrame {
         stayButton = new JButton("Stay");
         sendButton = new JButton("Send");
 
-        panel.setPreferredSize(new Dimension(500, 700));
-        outputScrollPane.setPreferredSize(new Dimension(450, 600));
+        panel.setPreferredSize(new Dimension(600, 800));
+        outputScrollPane.setPreferredSize(new Dimension(350, 600));
         inputScrollPane.setPreferredSize((new Dimension(120, 600)));
 
 

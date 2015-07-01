@@ -3,6 +3,9 @@
  */
 public class Client extends blackjackFrame {
 
+    private String out = "";
+
+
     @Override
     final protected void sendMessage()
     {
@@ -20,11 +23,16 @@ public class Client extends blackjackFrame {
     {
 
     }
-    
+
     @Override
     final protected void stay()
     {
 
     }
 
+
+    public Client()
+    {
+
+    }
 }
