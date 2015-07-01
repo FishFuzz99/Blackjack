@@ -1,6 +1,8 @@
 /**
  * Created by Andrew on 6/30/2015.
  */
+import blackjack_contract.Card;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -12,6 +14,7 @@ public class Connection implements Runnable {
     private ObjectInputStream cardInput;
     private ObjectOutputStream cardOutput;
     private Client client;
+    private Card incomingCard;
 
 
     public Connection(Client client)
@@ -20,25 +23,20 @@ public class Connection implements Runnable {
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         try {
             blackJackConnection = new Socket("localhost", 8989);
             //input = new DataInputStream(blackJackConnection.getInputStream());
             //output = new DataOutputStream(blackJackConnection.getOutputStream());
-            cardInput = new ObjectInputStream(blackJackConnection.getInputStream());
-            cardOutput = new ObjectOutputStream(blackJackConnection.getOutputStream());
+            this.cardInput = new ObjectInputStream(new BufferedInputStream(blackJackConnection.getInputStream()));
+            this.cardOutput = new ObjectOutputStream(new BufferedOutputStream(blackJackConnection.getOutputStream()));
 
-            while(blackJackConnection.isConnected() && !(blackJackConnection.isClosed()))
-            {
-                try
-                {
-                    Card incomingCard = cardInput.readObject();
+            while (blackJackConnection.isConnected() && !(blackJackConnection.isClosed())) {
+                try {
+                    incomingCard = (Card) cardInput.readObject();
 
                     client.appendText("Extract card info");
-                }
-                catch (NullPointerException e)
-                {
+                } catch (NullPointerException e) {
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -48,9 +46,32 @@ public class Connection implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
+    public void terminate()
+    {
+        try{
+            cardInput.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessageToServer(String message)
+    {
+        try {
+            cardOutput.writeUTF(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendCardToServer(Card card)
+    {
+        try {
+            cardOutput.writeObject(card);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
