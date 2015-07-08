@@ -1,3 +1,5 @@
+import blackjack_contract.Message;
+
 /**
  * Created by Andrew on 6/30/2015.
  */
@@ -5,15 +7,18 @@ public class Client extends blackjackFrame {
 
     private String out = "";
     private Connection connection;
+    private Message message;
+    private int handValue;
 
     @Override
     final protected void sendMessage()
     {
         out = chatInput.getText();
         try {
-            connection.sendMessageToServer(out);
+            connection.sendMessageObjectToServer(Message.createChatMessage(out, "AndrewGray"));
             out = "Client: " + out;
             appendText(out);
+
         }
         catch (Exception e)
         {
@@ -40,16 +45,20 @@ public class Client extends blackjackFrame {
     @Override
     final protected void hit()
     {
-        //request another card
+        connection.sendMessageObjectToServer(Message.createActionMessage(Message.Action.HIT, "AndrewGray"));
     }
 
     @Override
     final protected void stay()
     {
-        //do stuff
+        connection.sendMessageObjectToServer(Message.createActionMessage(Message.Action.STAY, "AndrewGray"));
     }
 
-
+    @Override
+    final protected void startGame()
+    {
+        connection.sendMessageObjectToServer(Message.createStartMessage("AndrewGray"));
+    }
     public Client()
     {
         Runtime.getRuntime().addShutdownHook(new Thread() {

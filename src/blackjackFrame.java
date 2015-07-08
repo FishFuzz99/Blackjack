@@ -22,6 +22,7 @@ abstract public class blackjackFrame extends JFrame {
     private JButton hitButton;
     private JButton stayButton;
     private JButton sendButton;
+    private JButton startGameButton;
     private JScrollPane outputScrollPane;
     private JScrollPane inputScrollPane;
     protected JTextArea chatOutput;
@@ -31,6 +32,7 @@ abstract public class blackjackFrame extends JFrame {
     protected abstract void sendMessage();
     protected abstract void hit();
     protected abstract void stay();
+    protected abstract void startGame();
 
     protected void startFrame(String buttonText)
     {
@@ -43,6 +45,7 @@ abstract public class blackjackFrame extends JFrame {
         outputScrollPane = new JScrollPane(chatOutput);
         inputScrollPane = new JScrollPane((chatInput));
         connectButton = new JButton("Connect");
+        startGameButton = new JButton("Start Game");
         hitButton = new JButton("Hit");
         stayButton = new JButton("Stay");
         sendButton = new JButton("Send");
@@ -77,9 +80,14 @@ abstract public class blackjackFrame extends JFrame {
                 stay();
             }
         });
+        startGameButton.addActionListener(new ActionListener() {
+            @Override
+             public void actionPerformed(ActionEvent e) { startGame(); }
+        });
 
         panel.add(outputScrollPane);
         panel.add(inputScrollPane);
+        panel.add(startGameButton);
         panel.add(hitButton);
         panel.add(stayButton);
         panel.add(connectButton);

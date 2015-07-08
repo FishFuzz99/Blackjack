@@ -2,6 +2,7 @@
  * Created by Andrew on 6/30/2015.
  */
 import blackjack_contract.Card;
+import blackjack_contract.Message;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,7 +16,7 @@ public class Connection implements Runnable {
     private ObjectOutputStream cardOutput;
     private Client client;
     private Card incomingCard;
-    private String incomingString;
+    private Message incomingMessage;
 
 
     public Connection(Client client)
@@ -29,15 +30,42 @@ public class Connection implements Runnable {
             blackJackConnection = new Socket("localhost", 8989);
             //input = new DataInputStream(blackJackConnection.getInputStream());
             //output = new DataOutputStream(blackJackConnection.getOutputStream());
-            this.cardInput = new ObjectInputStream(new BufferedInputStream(blackJackConnection.getInputStream()));
+
             this.cardOutput = new ObjectOutputStream(new BufferedOutputStream(blackJackConnection.getOutputStream()));
+
+            sendMessageToServer("AndrewGray");
+
+            this.cardInput = new ObjectInputStream(new BufferedInputStream(blackJackConnection.getInputStream()));
 
             while (blackJackConnection.isConnected() && !(blackJackConnection.isClosed())) {
                 try {
-                    incomingCard = (Card) cardInput.readObject();
-                    //incomingString - cardInput.readUTF();
+                    incomingMessage = (Message) cardInput.readObject();
 
-                    client.appendText("Extract card info");
+                    if (incomingMessage.getUsername() == "Client")
+                    {
+                        if (incomingMessage.getMessageType() == Message.Type.ACKNOWLEDGE)
+                        {
+
+                        }
+                        else if (incomingMessage.getMessageType() == Message.Type.DENY)
+                        {
+
+                        }
+                        else if (incomingMessage.getMessageType() == Message.Type.CARD)
+                        {
+                            client.appendText("You drew a " + incomingMessage.getCard().getValue() + " of " + incomingMessage.getCard().getSuite());
+                        }
+                    }
+                    else
+                    {
+                        if (incomingMessage.getMessageType() == Message.Type.CHAT)
+                        {
+                            client.appendText(incomingMessage.getUsername() + ": " + incomingMessage.getText());
+                        }
+                        // stuff from other people
+                    }
+
+                    //client.appendText(incomingMessage.getText());
                 } catch (NullPointerException e) {
 
                 } catch (ClassNotFoundException e) {
@@ -69,10 +97,11 @@ public class Connection implements Runnable {
         }
     }
 
-    public void sendCardToServer(Card card)
+    public void sendMessageObjectToServer(Message message)
     {
         try {
-            cardOutput.writeObject(card);
+            cardOutput.writeObject(message);
+            cardOutput.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
