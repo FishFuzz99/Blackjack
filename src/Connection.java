@@ -15,8 +15,8 @@ public class Connection implements Runnable {
     private ObjectInputStream cardInput;
     private ObjectOutputStream cardOutput;
     private Client client;
-    private Card incomingCard;
-    private Message incomingMessage;
+    private Card incomingCard;					Declared outside of required scope
+    private Message incomingMessage;			Declared outside of required scope
 
 
     public Connection(Client client)
@@ -41,9 +41,9 @@ public class Connection implements Runnable {
                 try {
                     incomingMessage = (Message) cardInput.readObject();
 
-                    if (incomingMessage.getUsername() == "Client")
+                    if (incomingMessage.getUsername() == "Client")			Don't use == to compare strings
                     {
-                        if (incomingMessage.getMessageType() == Message.Type.ACKNOWLEDGE)
+                        if (incomingMessage.getMessageType() == Message.Type.ACKNOWLEDGE)		.equals comparison for objects, as well
                         {
 
                         }
@@ -66,7 +66,7 @@ public class Connection implements Runnable {
                     }
 
                     //client.appendText(incomingMessage.getText());
-                } catch (NullPointerException e) {
+                } catch (NullPointerException e) {			// XXX Don't forget, use client == null, not an NPE!
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -85,6 +85,7 @@ public class Connection implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Need to close the socket connection, not just the input (don't forget the output)
     }
 
     public void sendMessageToServer(String message)

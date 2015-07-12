@@ -4,12 +4,15 @@ import blackjack_contract.Message;
  * Created by Andrew on 6/30/2015.
  */
 public class Client extends blackjackFrame {
+	// XXX It's useless for something to be serializable if it doesn't include the serialVersionUID value
 
     private String out = "";
     private Connection connection;
-    private Message message;
+    private Message message;					// XXX remove unused values
     private int handValue;
 
+    You've broken encapsulation throughout - using the "extends" keyword and "protected" methods
+    is NOT a valid way to access other class methods (in any Object Oriented language, not just Java)
     @Override
     final protected void sendMessage()
     {
@@ -20,7 +23,7 @@ public class Client extends blackjackFrame {
             appendText(out);
 
         }
-        catch (Exception e)
+        catch (Exception e) Good to handle exceptions, but this is nearly useless - can't say anything about what went wrong
         {
             e.printStackTrace();
         }
@@ -71,6 +74,6 @@ public class Client extends blackjackFrame {
                     }
                 }
         });
-        this.startFrame("Test");
+        this.startFrame("Test");				// XXX Don't have to use this, unless there is other ambiguity
     }
 }

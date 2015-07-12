@@ -17,18 +17,18 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.text.JTextComponent;
 
 abstract public class blackjackFrame extends JFrame {
-    private JPanel panel;
-    private JButton connectButton;
-    private JButton hitButton;
-    private JButton stayButton;
-    private JButton sendButton;
-    private JButton startGameButton;
-    private JScrollPane outputScrollPane;
-    private JScrollPane inputScrollPane;
-    protected JTextArea chatOutput;
-    protected JTextArea chatInput;
+    private JPanel panel;					Declared outside of required scope
+    private JButton connectButton;			Declared outside of required scope
+    private JButton hitButton;				Declared outside of required scope
+    private JButton stayButton;				Declared outside of required scope
+    private JButton sendButton;				Declared outside of required scope
+    private JButton startGameButton;		Declared outside of required scope
+    private JScrollPane outputScrollPane;	Declared outside of required scope
+    private JScrollPane inputScrollPane;	Declared outside of required scope
+    protected JTextArea chatOutput;			Declared outside of required scope
+    protected JTextArea chatInput;			Declared outside of required scope
 
-    protected abstract void connectToChat();
+    protected abstract void connectToChat();		// XXX as noted in the Client class, these could be avoided if you weren't using extends
     protected abstract void sendMessage();
     protected abstract void hit();
     protected abstract void stay();
@@ -51,8 +51,8 @@ abstract public class blackjackFrame extends JFrame {
         sendButton = new JButton("Send");
 
         panel.setPreferredSize(new Dimension(575, 775));
-        outputScrollPane.setPreferredSize(new Dimension(550, 400));
-        inputScrollPane.setPreferredSize((new Dimension(550, 150)));
+        outputScrollPane.setPreferredSize(new Dimension(550, 400));	// XXX The same effect can be achieved by
+        inputScrollPane.setPreferredSize((new Dimension(550, 150)));	// using rows/columns on the JTextArea constructor
 
 
         connectButton.addActionListener(new ActionListener() {
